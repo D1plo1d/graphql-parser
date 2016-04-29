@@ -492,26 +492,26 @@ static VALUE enum_value_get_value(VALUE self) {
 }
 
 
-const rb_data_type_t array_value_type = { "GraphQLAstArrayValue", {}, };
-VALUE array_value_class;
-ID visit_array_value_id;
-ID end_visit_array_value_id;
-static int visit_array_value(const struct GraphQLAstArrayValue *array_value, void *user_data) {
+const rb_data_type_t list_value_type = { "GraphQLAstListValue", {}, };
+VALUE list_value_class;
+ID visit_list_value_id;
+ID end_visit_list_value_id;
+static int visit_list_value(const struct GraphQLAstListValue *list_value, void *user_data) {
   VALUE parent = (VALUE)user_data;
-  VALUE param = TypedData_Wrap_Struct(array_value_class, &array_value_type, (void*)array_value);
-  return rb_funcall(parent, visit_array_value_id, 1, param) != skip_children;
+  VALUE param = TypedData_Wrap_Struct(list_value_class, &list_value_type, (void*)list_value);
+  return rb_funcall(parent, visit_list_value_id, 1, param) != skip_children;
 }
 
-static void end_visit_array_value(const struct GraphQLAstArrayValue *array_value, void *user_data) {
+static void end_visit_list_value(const struct GraphQLAstListValue *list_value, void *user_data) {
   VALUE parent = (VALUE)user_data;
-  VALUE param = TypedData_Wrap_Struct(array_value_class, &array_value_type, (void*)array_value);
-  rb_funcall(parent, end_visit_array_value_id, 1, param);
+  VALUE param = TypedData_Wrap_Struct(list_value_class, &list_value_type, (void*)list_value);
+  rb_funcall(parent, end_visit_list_value_id, 1, param);
 }
 
-static VALUE array_value_get_values_size(VALUE self) {
-  struct GraphQLAstArrayValue *node;
-  TypedData_Get_Struct(self, struct GraphQLAstArrayValue, &array_value_type, node);
-  return INT2FIX(GraphQLAstArrayValue_get_values_size(node));
+static VALUE list_value_get_values_size(VALUE self) {
+  struct GraphQLAstListValue *node;
+  TypedData_Get_Struct(self, struct GraphQLAstListValue, &list_value_type, node);
+  return INT2FIX(GraphQLAstListValue_get_values_size(node));
 }
 
 
@@ -755,7 +755,7 @@ void init_graphql(void) {
   string_value_class = rb_define_class_under(parser, "StringValue", node_class);
   boolean_value_class = rb_define_class_under(parser, "BooleanValue", node_class);
   enum_value_class = rb_define_class_under(parser, "EnumValue", node_class);
-  array_value_class = rb_define_class_under(parser, "ArrayValue", node_class);
+  list_value_class = rb_define_class_under(parser, "ListValue", node_class);
   object_value_class = rb_define_class_under(parser, "ObjectValue", node_class);
   object_field_class = rb_define_class_under(parser, "ObjectField", node_class);
   directive_class = rb_define_class_under(parser, "Directive", node_class);
@@ -796,7 +796,7 @@ void init_graphql(void) {
   rb_define_method(string_value_class, "value", string_value_get_value, 0);
   rb_define_method(boolean_value_class, "value", boolean_value_get_value, 0);
   rb_define_method(enum_value_class, "value", enum_value_get_value, 0);
-  rb_define_method(array_value_class, "values_size", array_value_get_values_size, 0);
+  rb_define_method(list_value_class, "values_size", list_value_get_values_size, 0);
   rb_define_method(object_value_class, "fields_size", object_value_get_fields_size, 0);
   rb_define_method(object_field_class, "name", object_field_get_name, 0);
   rb_define_method(object_field_class, "value", object_field_get_value, 0);
@@ -837,8 +837,8 @@ void init_graphql(void) {
   end_visit_boolean_value_id = rb_intern("end_visit_boolean_value");
   visit_enum_value_id = rb_intern("visit_enum_value");
   end_visit_enum_value_id = rb_intern("end_visit_enum_value");
-  visit_array_value_id = rb_intern("visit_array_value");
-  end_visit_array_value_id = rb_intern("end_visit_array_value");
+  visit_list_value_id = rb_intern("visit_list_value");
+  end_visit_list_value_id = rb_intern("end_visit_list_value");
   visit_object_value_id = rb_intern("visit_object_value");
   end_visit_object_value_id = rb_intern("end_visit_object_value");
   visit_object_field_id = rb_intern("visit_object_field");
@@ -884,8 +884,8 @@ void init_graphql(void) {
   cbs.end_visit_boolean_value = end_visit_boolean_value;
   cbs.visit_enum_value = visit_enum_value;
   cbs.end_visit_enum_value = end_visit_enum_value;
-  cbs.visit_array_value = visit_array_value;
-  cbs.end_visit_array_value = end_visit_array_value;
+  cbs.visit_list_value = visit_list_value;
+  cbs.end_visit_list_value = end_visit_list_value;
   cbs.visit_object_value = visit_object_value;
   cbs.end_visit_object_value = end_visit_object_value;
   cbs.visit_object_field = visit_object_field;

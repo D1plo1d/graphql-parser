@@ -121,11 +121,11 @@ extern VALUE enum_value_class;
 extern ID visit_enum_value_id;
 extern ID end_visit_enum_value_id;
 
-struct GraphQLAstArrayValue;
-extern const rb_data_type_t array_value_type;
-extern VALUE array_value_class;
-extern ID visit_array_value_id;
-extern ID end_visit_array_value_id;
+struct GraphQLAstListValue;
+extern const rb_data_type_t list_value_type;
+extern VALUE list_value_class;
+extern ID visit_list_value_id;
+extern ID end_visit_list_value_id;
 
 struct GraphQLAstObjectValue;
 extern const rb_data_type_t object_value_type;
