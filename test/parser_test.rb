@@ -7,7 +7,7 @@ class ParserTest < Minitest::Test
   def test_that_parsing_returns_an_ast
     expect_parse_success('{ field }')
     expect_parse_success('{ field(complex: { a: { b: [ $var ] } }) }')
-    expect_parse_success('subscription some_event { { field } }')
+    expect_parse_success('subscription some_event { field }')
   end
 
   def test_parse_error
